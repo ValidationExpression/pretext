@@ -31,6 +31,8 @@ DOM-free text measurement using canvas `measureText()` + `Intl.Segmenter`. Two-p
 - Kinsoku shori: CJK punctuation merged with adjacent graphemes so they can't be separated across line breaks.
 - CSS config: targets the default (`white-space: normal`, `word-break: normal`, `overflow-wrap: break-word`, `line-break: auto`). Other configurations (e.g. `break-all`, `keep-all`, `strict`, `loose`, `anywhere`) are untested and unsupported.
 - lineHeight default (`round(fontSize * 1.2)`) doesn't match CSS `line-height: normal` for all fonts/browsers. Georgia is off by 1px on Chrome/Safari, Firefox returns fractional values. Always pass explicit lineHeight matching your CSS.
+- system-ui font: Safari OK, Chrome sometimes mismatches (documented), Firefox is catastrophic (48px diff — canvas and DOM resolve to different fonts). Never use system-ui with this library.
+- Thai: Intl.Segmenter and CSS use different internal dictionaries for word boundaries. Same text, different break points. Causes ~2 mismatches on Firefox. Unfixable from our side.
 - HarfBuzz with explicit LTR for headless tests: guessSegmentProperties assigns wrong direction to isolated Arabic words.
 
 ### Accuracy
