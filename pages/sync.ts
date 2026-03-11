@@ -194,23 +194,25 @@ function syncFrom(source: Pane): void {
   const sourceLines = source.lines
   if (sourceLines.length === 0) return
 
-  const rawIndex = Math.floor(source.viewport.scrollTop / LINE_HEIGHT)
+  const anchorOffset = source.viewport.clientHeight / 2
+  const anchoredPosition = source.viewport.scrollTop + anchorOffset
+  const rawIndex = Math.floor(anchoredPosition / LINE_HEIGHT)
   const sourceIndex = Math.max(0, Math.min(rawIndex, sourceLines.length - 1))
   const sourceLine = sourceLines[sourceIndex]!
-  const intraLineOffset = source.viewport.scrollTop - sourceIndex * LINE_HEIGHT
+  const intraLineOffset = anchoredPosition - sourceIndex * LINE_HEIGHT
 
   syncing = true
   try {
     setActiveAnchor(sourceLine.start, source, sourceIndex)
     statAnchor.textContent = formatCursor(sourceLine.start)
     anchorMeta.textContent =
-      `Pane ${source.key.toUpperCase()} is anchoring the shared cursor ${formatCursor(sourceLine.start)}. ` +
-      `Other panes are snapped to the nearest line that begins at or before that cursor.`
+      `Pane ${source.key.toUpperCase()} is centering the shared cursor ${formatCursor(sourceLine.start)}. ` +
+      `Other panes align the nearest line that begins at or before that cursor to the same viewport height.`
 
     for (const pane of panes) {
       if (pane === source) continue
       const targetIndex = findAnchorLineIndex(pane.lines, sourceLine.start)
-      pane.viewport.scrollTop = targetIndex * LINE_HEIGHT + intraLineOffset
+      pane.viewport.scrollTop = Math.max(0, targetIndex * LINE_HEIGHT + intraLineOffset - pane.viewport.clientHeight / 2)
     }
   } finally {
     syncing = false
