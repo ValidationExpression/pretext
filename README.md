@@ -241,7 +241,7 @@ Pretext doesn't try to be a full font rendering engine (yet?). It currently targ
 
 ## Develop
 
-See [DEVELOPMENT.md](DEVELOPMENT.md) for the dev setup and commands.
+See [DEVELOPMENT.md](https://github.com/chenglou/pretext/blob/main/DEVELOPMENT.md) for the dev setup and commands.
 
 ## Credits
 
